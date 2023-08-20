@@ -11,7 +11,6 @@ import {
   List,
   ListItem,
 } from "../components/Card";
-import { GroceryList } from "@prisma/client";
 
 const Home: NextPage = () => {
   const [itemName, setItemName] = useState<string>("");
@@ -31,7 +30,7 @@ const Home: NextPage = () => {
     if (itemName === "") return;
 
     insertMutation.mutate({
-      title: itemName,
+      note: itemName,
     });
 
     setItemName("");
@@ -45,20 +44,10 @@ const Home: NextPage = () => {
     }
   }, [list, deleteAllMutation]);
 
-  const updateOne = useCallback(
-    (item: GroceryList) => {
-      updateOneMutation.mutate({
-        ...item,
-        checked: !item.checked,
-      });
-    },
-    [updateOneMutation]
-  );
-
   return (
     <>
       <Head>
-        <title>Grocery List</title>
+        <title>Note List</title>
         <meta name="description" content="Visit www.mosano.eu" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -67,13 +56,13 @@ const Home: NextPage = () => {
         <Card>
           <CardContent>
             <CardHeader
-              title="Grocery List"
+              note="Note List"
               listLength={list?.length ?? 0}
               clearAllFn={clearAll}
             />
             <List>
               {list?.map((item) => (
-                <ListItem key={item.id} item={item} onUpdate={updateOne} />
+                <ListItem key={item.id} item={item} />
               ))}
             </List>
           </CardContent>

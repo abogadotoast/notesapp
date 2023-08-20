@@ -7,29 +7,29 @@ export const serverRouter = trpc
   .router<Context>()
   .query("findAll", {
     resolve: async ({ ctx }) => {
-      return await ctx.prisma.groceryList.findMany();
+      return await ctx.prisma.noteList.findMany();
     },
   })
   .mutation("insertOne", {
     input: z.object({
-      title: z.string(),
+      note: z.string(),
     }),
     resolve: async ({ input, ctx }) => {
-      return await ctx.prisma.groceryList.create({
-        data: { title: input.title },
+      return await ctx.prisma.noteList.create({
+        data: { note: input.note },
       });
     },
   })
   .mutation("updateOne", {
     input: z.object({
       id: z.number(),
-      title: z.string(),
+      note: z.string(),
       checked: z.boolean(),
     }),
     resolve: async ({ input, ctx }) => {
       const { id, ...rest } = input;
 
-      return await ctx.prisma.groceryList.update({
+      return await ctx.prisma.noteList.update({
         where: { id },
         data: { ...rest },
       });
@@ -42,7 +42,7 @@ export const serverRouter = trpc
     resolve: async ({ input, ctx }) => {
       const { ids } = input;
 
-      return await ctx.prisma.groceryList.deleteMany({
+      return await ctx.prisma.noteList.deleteMany({
         where: {
           id: { in: ids },
         },

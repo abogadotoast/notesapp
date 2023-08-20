@@ -1,6 +1,6 @@
 import React, { memo } from "react";
 import type { NextPage } from "next";
-import { GroceryList } from "@prisma/client";
+import { NoteList } from "@prisma/client";
 
 interface CardProps {
   children: React.ReactNode;
@@ -23,13 +23,13 @@ export const CardContent: NextPage<CardProps> = ({ children }) => {
 };
 
 interface CardHeaderProps {
-  title: string;
+  note: string;
   listLength: number;
   clearAllFn?: () => void;
 }
 
 export const CardHeader: NextPage<CardHeaderProps> = ({
-  title,
+  note,
   listLength,
   clearAllFn,
 }) => {
@@ -37,7 +37,7 @@ export const CardHeader: NextPage<CardHeaderProps> = ({
     <div className="flex flex-row items-center justify-between p-3 border-b border-slate-200">
       <div className="flex flex-row items-center justify-between">
         <h1 className="text-base font-medium tracking-wide text-gray-900 mr-2">
-          {title}
+          {note}
         </h1>
         <span className="h-5 w-5 bg-blue-200 text-blue-600 flex items-center justify-center rounded-full text-xs">
           {listLength}
@@ -59,20 +59,14 @@ export const List: NextPage<CardProps> = ({ children }) => {
 };
 
 interface ListItemProps {
-  item: GroceryList;
-  onUpdate?: (item: GroceryList) => void;
+  item: NoteList;
+  onUpdate?: (item: NoteList) => void;
 }
 
 const ListItemComponent: NextPage<ListItemProps> = ({ item, onUpdate }) => {
   return (
     <div className="h-12 border-b flex items-center justify-start px-3">
-      <input
-        type="checkbox"
-        className="w-4 h-4 border-gray-300 rounded mr-4"
-        defaultChecked={item.checked as boolean}
-        onChange={() => onUpdate?.(item)}
-      />
-      <h2 className="text-gray-600 tracking-wide text-sm">{item.title}</h2>
+      <h2 className="text-gray-600 tracking-wide text-sm">{item.note}</h2>
     </div>
   );
 };
@@ -96,7 +90,7 @@ export const CardForm: NextPage<CardFormProps> = ({
         <input
           className="w-full py-4 pl-3 pr-16 text-sm rounded-lg"
           type="text"
-          placeholder="Grocery item name..."
+          placeholder="Add a note..."
           onChange={onChange}
           value={value}
         />

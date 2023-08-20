@@ -12,3 +12,7 @@ model GroceryList {
   title   String
   checked Boolean? @default(false)
 }
+model NoteList {
+    id      Int      @id @default(autoincrement())
+    note  String
+}
