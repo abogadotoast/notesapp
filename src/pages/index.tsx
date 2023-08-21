@@ -49,6 +49,14 @@ const Home: NextPage = () => {
     setItemName("");
   }, [itemName, insertMutation]);
 
+  const deleteOne = useCallback((noteId: number) => {
+    if (list?.length) {
+      deleteAllMutation.mutate({
+        ids: [noteId],
+      });
+    }
+  }, [list, deleteAllMutation]);
+
   const clearAll = useCallback(() => {
     if (list?.length) {
       deleteAllMutation.mutate({
@@ -77,7 +85,7 @@ const Home: NextPage = () => {
             />
             <List>
               {list?.map((item) => (
-                <ListItem key={item.id} item={item} />
+                <ListItem key={item.id} item={item} deleteNote={deleteOne}/>
               ))}
             </List>
           </CardContent>

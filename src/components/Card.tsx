@@ -1,6 +1,7 @@
-import React, { memo } from "react";
+import React, { memo, useCallback } from "react";
 import type { NextPage } from "next";
 import { NoteList } from "@prisma/client";
+import { trpc } from "@/utils/trpc";
 
 interface CardProps {
   children: React.ReactNode;
@@ -21,6 +22,11 @@ export const CardContent: NextPage<CardProps> = ({ children }) => {
     </div>
   );
 };
+
+// get the current item id and send it back up the prop tree to be deleted
+const handleDelete = async (item : NoteList, deleteNote: any  ) =>  {
+  deleteNote(item.id);
+}
 
 interface CardHeaderProps {
   note: string;
@@ -49,7 +55,7 @@ export const CardHeader: NextPage<CardHeaderProps> = ({
         <input
           className="w-full py-4 pl-3 pr-16 text-sm rounded-lg"
           type="text"
-          placeholder="Add a note :)..."
+          placeholder="Find a note :)..."
           onChange={onChange}
           value={value}
         />
@@ -72,12 +78,33 @@ export const List: NextPage<CardProps> = ({ children }) => {
 interface ListItemProps {
   item: NoteList;
   onUpdate?: (item: NoteList) => void;
+  deleteNote: (noteId: number) => void;
 }
 
-const ListItemComponent: NextPage<ListItemProps> = ({ item, onUpdate }) => {
+const ListItemComponent: NextPage<ListItemProps> = ({ item, onUpdate, deleteNote }) => {
   return (
     <div className="h-12 border-b flex items-center justify-start px-3">
       <h2 className="text-gray-600 tracking-wide text-sm">{item.note}</h2>
+      <button
+          className="absolute p-2 text-white bg-red-600 rounded-full right-4"
+          type="button"
+          onClick={() => handleDelete(item, deleteNote)}
+        >
+          <svg
+            className="w-4 h-4"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            />
+          </svg>
+        </button>
     </div>
   );
 };
