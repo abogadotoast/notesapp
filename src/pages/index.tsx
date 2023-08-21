@@ -15,9 +15,10 @@ import {
 import {
   NoteItem
 } from "../components/Note";
-
+import {
+  CreateNewNote
+} from "../components/CreateNewNote"
 const Home: NextPage = () => {
-  const [itemName, setItemName] = useState<string>("");
   const [searchStr, setSearchStr] = useState<string>("");
 
   const partialQuery : any = trpc.useQuery(["findAllMatching", {searchStr}], {
@@ -39,17 +40,13 @@ const Home: NextPage = () => {
   const searchForNote = useCallback((searchStr : string) => {
     setSearchStr(searchStr);
 
-  }, [itemName, partialQuery]);
+  }, [searchStr, partialQuery]);
 
-  const insertOne = useCallback(() => {
-    if (itemName === "") return;
-
+  const insertOne = useCallback((note : string) => {
     insertMutation.mutate({
-      note: itemName,
+      note: note,
     });
-
-    setItemName("");
-  }, [itemName, insertMutation]);
+  }, [list, insertMutation]);
 
   const deleteOne = useCallback((noteId: number) => {
     if (list?.length) {
@@ -101,11 +98,7 @@ const Home: NextPage = () => {
               ))}
             </List>
           </CardContent>
-          <CardForm
-            value={itemName}
-            onChange={(e) => setItemName(e.target.value)}
-            submit={insertOne}
-          />
+          <CreateNewNote insertNote={insertOne}></CreateNewNote>
         </Card>
       </main>
     </>
