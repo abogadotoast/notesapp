@@ -16,13 +16,13 @@ const Home: NextPage = () => {
   const [itemName, setItemName] = useState<string>("");
   const [searchStr, setSearchStr] = useState<string>("");
 
-  const { refetch } = trpc.useQuery(["findAll"]);
+ // const { refetch, data: list } = trpc.useQuery(["findAll"]);
 
   const partialQuery = trpc.useQuery(["findAllMatching", {searchStr}], {
     onSuccess: () => refetch(),
   });
 
-  const { data: list } = partialQuery;
+  const { refetch, data: list } = partialQuery;
 
   const insertMutation = trpc.useMutation(["insertOne"], {
     onSuccess: () => refetch(),

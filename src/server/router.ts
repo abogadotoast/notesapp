@@ -15,8 +15,6 @@ export const serverRouter = trpc
       searchStr: z.string(),
     }),
     resolve: async ({ input, ctx }) => {
-      console.log("reached findmany");
-      console.log("input: " + input.searchStr);
       return await ctx.prisma.noteList.findMany({
         where: {
           note: {
