@@ -12,6 +12,10 @@ import {
   ListItem,
 } from "../components/Card";
 
+import {
+  NoteItem
+} from "../components/Note";
+
 const Home: NextPage = () => {
   const [itemName, setItemName] = useState<string>("");
   const [searchStr, setSearchStr] = useState<string>("");
@@ -55,6 +59,15 @@ const Home: NextPage = () => {
     }
   }, [list, deleteAllMutation]);
 
+  const editOne = useCallback((id: number, note: string) => {
+    if (id) {
+      updateOneMutation.mutate({
+        note,
+        id
+      });
+    }
+  }, [list, updateOneMutation]);
+
   const clearAll = useCallback(() => {
     if (list?.length) {
       deleteAllMutation.mutate({
@@ -83,7 +96,8 @@ const Home: NextPage = () => {
             />
             <List>
               {list?.map((item) => (
-                <ListItem key={item.id} item={item} deleteNote={deleteOne}/>
+                <NoteItem key={item.id} item={item} editNote={editOne} deleteNote={deleteOne} />
+                //<ListItem key={item.id} item={item} deleteNote={deleteOne}/>
               ))}
             </List>
           </CardContent>

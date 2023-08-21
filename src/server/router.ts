@@ -32,8 +32,7 @@ export const serverRouter = trpc
   .mutation("updateOne", {
     input: z.object({
       id: z.number(),
-      note: z.string(),
-      checked: z.boolean(),
+      note: z.string()
     }),
     resolve: async ({ input, ctx }) => {
       const { id, ...rest } = input;
