@@ -26,12 +26,16 @@ interface CardHeaderProps {
   note: string;
   listLength: number;
   clearAllFn?: () => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  value: string;
 }
 
 export const CardHeader: NextPage<CardHeaderProps> = ({
   note,
   listLength,
   clearAllFn,
+  onChange,
+  value,
 }) => {
   return (
     <div className="flex flex-row items-center justify-between p-3 border-b border-slate-200">
@@ -42,6 +46,13 @@ export const CardHeader: NextPage<CardHeaderProps> = ({
         <span className="h-5 w-5 bg-blue-200 text-blue-600 flex items-center justify-center rounded-full text-xs">
           {listLength}
         </span>
+        <input
+          className="w-full py-4 pl-3 pr-16 text-sm rounded-lg"
+          type="text"
+          placeholder="Add a note :)..."
+          onChange={onChange}
+          value={value}
+        />
       </div>
       <button
         className="text-sm font-medium text-gray-600 underline"
@@ -90,7 +101,7 @@ export const CardForm: NextPage<CardFormProps> = ({
         <input
           className="w-full py-4 pl-3 pr-16 text-sm rounded-lg"
           type="text"
-          placeholder="Add a note..."
+          placeholder="Add a note :)..."
           onChange={onChange}
           value={value}
         />

@@ -10,6 +10,22 @@ export const serverRouter = trpc
       return await ctx.prisma.noteList.findMany();
     },
   })
+  .query("findAllMatching", {
+    input: z.object({
+      searchStr: z.string(),
+    }),
+    resolve: async ({ input, ctx }) => {
+      console.log("reached findmany");
+      console.log("input: " + input.searchStr);
+      return await ctx.prisma.noteList.findMany({
+        where: {
+          note: {
+            contains: input.searchStr
+          },
+        },
+      })
+    },
+  })
   .mutation("insertOne", {
     input: z.object({
       note: z.string(),

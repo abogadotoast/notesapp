@@ -14,8 +14,16 @@ import {
 
 const Home: NextPage = () => {
   const [itemName, setItemName] = useState<string>("");
+  const [searchStr, setSearchStr] = useState<string>("");
 
-  const { data: list, refetch } = trpc.useQuery(["findAll"]);
+  const { refetch } = trpc.useQuery(["findAll"]);
+
+  const partialQuery = trpc.useQuery(["findAllMatching", {searchStr}], {
+    onSuccess: () => refetch(),
+  });
+
+  const { data: list } = partialQuery;
+
   const insertMutation = trpc.useMutation(["insertOne"], {
     onSuccess: () => refetch(),
   });
@@ -25,6 +33,11 @@ const Home: NextPage = () => {
   const updateOneMutation = trpc.useMutation(["updateOne"], {
     onSuccess: () => refetch(),
   });
+
+  const searchForNote = useCallback((searchStr : string) => {
+    setSearchStr(searchStr);
+
+  }, [itemName, partialQuery]);
 
   const insertOne = useCallback(() => {
     if (itemName === "") return;
@@ -46,9 +59,9 @@ const Home: NextPage = () => {
 
   return (
     <>
+
       <Head>
         <title>Note List</title>
-        <meta name="description" content="Visit www.mosano.eu" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
 
@@ -59,6 +72,8 @@ const Home: NextPage = () => {
               note="Note List"
               listLength={list?.length ?? 0}
               clearAllFn={clearAll}
+              value={searchStr}
+              onChange={(e) => searchForNote(e.target.value)}
             />
             <List>
               {list?.map((item) => (
