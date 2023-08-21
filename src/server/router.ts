@@ -5,11 +5,6 @@ import { Context } from "./context";
 
 export const serverRouter = trpc
   .router<Context>()
-  .query("findAll", {
-    resolve: async ({ ctx }) => {
-      return await ctx.prisma.noteList.findMany();
-    },
-  })
   .query("findAllMatching", {
     input: z.object({
       searchStr: z.string(),

@@ -16,9 +16,7 @@ const Home: NextPage = () => {
   const [itemName, setItemName] = useState<string>("");
   const [searchStr, setSearchStr] = useState<string>("");
 
- // const { refetch, data: list } = trpc.useQuery(["findAll"]);
-
-  const partialQuery = trpc.useQuery(["findAllMatching", {searchStr}], {
+  const partialQuery : any = trpc.useQuery(["findAllMatching", {searchStr}], {
     onSuccess: () => refetch(),
   });
 
